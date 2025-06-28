@@ -5,8 +5,9 @@ using UnityEngine.UI;
 public class UI : MonoBehaviour
 {
    [SerializeField] private Slider  _thrusterSlider;
+   [SerializeField] private Slider _sensitivitySlider;
     PlayerMovement player;
-    public float initValue;
+    public float initValue, sensitivityBar;
 
     public void UpdateInputBar (float initValue){
         if (initValue < 0) {
@@ -17,13 +18,14 @@ public class UI : MonoBehaviour
         _thrusterSlider.value = initValue;
 
     }
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         player = PlayerMovement.player;
         initValue = player.loudness;
 
-        
+        sensitivityBar = player.loudnessSensibility;
     }
 
     // Update is called once per frame
@@ -39,5 +41,16 @@ public class UI : MonoBehaviour
             _thrusterSlider.value +=10;
             Debug.Log("Space Pressed");
         }
+
+        if (_sensitivitySlider.value>=sensitivityBar){
+            Debug.Log (sensitivityBar);
+            _sensitivitySlider.value = sensitivityBar;
+        }
+        if (_sensitivitySlider.value<sensitivityBar){
+            sensitivityBar=_sensitivitySlider.value;
+
+        }
+            _sensitivitySlider.value = sensitivityBar;
+        
     }
 }
