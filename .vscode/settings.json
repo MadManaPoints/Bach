@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "CodenameBach.sln"
+    "dotnet.defaultSolution": "Bach.sln"
 }
