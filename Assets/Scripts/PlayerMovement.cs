@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public AudioSource source;
     public Vector2 minScale, maxScale;
     public AudioLoudnessDetection detector;
+    public float loudness;
 
     public float loudnessSensibility = 100;
     public float threshold = 0.1f;
@@ -50,12 +51,12 @@ public class PlayerMovement : MonoBehaviour
 
     void MicrophoneDetection()
     {
-        float loudness = detector.MicrophoneLoudness() * loudnessSensibility;
+        loudness = detector.MicrophoneLoudness() * loudnessSensibility;
 
         if (loudness < threshold)
         {
             loudness = 0;
-            Debug.Log("No Voice input");
+            //Debug.Log("No Voice input");
         }
 
         if (loudness > yellingThreshold && canJump)
@@ -72,6 +73,7 @@ public class PlayerMovement : MonoBehaviour
             //print("NADA");
             walking = false;
         }
+
         //print(canJump);
         // lerp value between min and max
         //transform.localScale = Vector2.Lerp(minScale, maxScale, loudness);
@@ -89,7 +91,6 @@ public class PlayerMovement : MonoBehaviour
         float loudness = detector.GetLoudness(source.timeSamples, source.clip);
         // lerp value between min and max
         transform.localScale = Vector2.Lerp(minScale, maxScale, loudness);
-        voiceInputFill.fillAmount = loudness / 100f;
 
     }
 
