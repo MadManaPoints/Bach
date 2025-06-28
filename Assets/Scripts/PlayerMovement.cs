@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem.Controls;
+using UnityEngine.UI;
 
 
 public class PlayerMovement : MonoBehaviour
@@ -17,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float jumpForce = 500.0f;
 
     bool walking, canJump = true, jump;
+    public Image voiceInputFill;
 
     void Awake()
     {
@@ -53,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
         if (loudness < threshold)
         {
             loudness = 0;
+            Debug.Log("No Voice input");
         }
 
         if (loudness > yellingThreshold && canJump)
@@ -86,6 +89,8 @@ public class PlayerMovement : MonoBehaviour
         float loudness = detector.GetLoudness(source.timeSamples, source.clip);
         // lerp value between min and max
         transform.localScale = Vector2.Lerp(minScale, maxScale, loudness);
+        voiceInputFill.fillAmount = loudness / 100f;
+
     }
 
     void OnCollisionEnter2D(Collision2D col)
