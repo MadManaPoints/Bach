@@ -1,41 +1,101 @@
 using UnityEngine;
+using UnityEngine.InputSystem.Controls;
 
 
 public class PlayerMovement : MonoBehaviour
 {
+    public static PlayerMovement player;
+    Rigidbody2D rb;
     public AudioSource source;
     public Vector2 minScale, maxScale;
     public AudioLoudnessDetection detector;
 
     public float loudnessSensibility = 100;
     public float threshold = 0.1f;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] float yellingThreshold = 4.0f;
+    [SerializeField] float moveSpeed = 100.0f;
+    [SerializeField] float jumpForce = 500.0f;
+
+    bool walking, canJump = true, jump;
+
+    void Awake()
+    {
+        player = this;
+    }
     void Start()
     {
-
+        rb = player.GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         MicrophoneDetection();
     }
 
+    void FixedUpdate()
+    {
+        if (walking)
+        {
+            rb.linearVelocity = new Vector2(moveSpeed * Time.deltaTime, rb.linearVelocity.y);
+        }
+        else
+        {
+            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+        }
+
+        if (jump) Jump();
+    }
+
     void MicrophoneDetection()
-    { 
+    {
         float loudness = detector.MicrophoneLoudness() * loudnessSensibility;
 
         if (loudness < threshold)
         {
             loudness = 0;
         }
+
+        if (loudness > yellingThreshold && canJump)
+        {
+            jump = true;
+        }
+        else if (loudness >= threshold)
+        {
+            //print("WALKING");
+            walking = true;
+        }
+        else
+        {
+            //print("NADA");
+            walking = false;
+        }
+        //print(canJump);
         // lerp value between min and max
-        transform.localScale = Vector2.Lerp(minScale, maxScale, loudness); 
+        //transform.localScale = Vector2.Lerp(minScale, maxScale, loudness);
+    }
+
+    void Jump()
+    {
+        //print("JUMP!!!");
+        canJump = false;
+        rb.AddForce(Vector2.up * jumpForce * Time.deltaTime, ForceMode2D.Impulse); ;
+        jump = false;
     }
     void AudioSampleDetection()
-    { 
-       float loudness = detector.GetLoudness(source.timeSamples, source.clip);
+    {
+        float loudness = detector.GetLoudness(source.timeSamples, source.clip);
         // lerp value between min and max
-        transform.localScale = Vector2.Lerp(minScale, maxScale, loudness); 
+        transform.localScale = Vector2.Lerp(minScale, maxScale, loudness);
     }
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.tag == "Ground") canJump = true;
+    }
+
+    void OnCollisionExit2D(Collision2D col)
+    {
+        if (col.gameObject.tag == "Ground") canJump = false;
+    }
+
 }
