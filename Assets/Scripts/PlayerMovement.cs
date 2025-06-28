@@ -6,6 +6,9 @@ using UnityEngine.UI;
 public class PlayerMovement : MonoBehaviour
 {
     public static PlayerMovement player;
+    public float playerHeight;
+    public LayerMask daGround;
+    bool onGround;
     Rigidbody2D rb;
     public AudioSource source;
     public Vector2 minScale, maxScale;
@@ -20,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
 
     bool walking, canJump = true, jump;
     public Image voiceInputFill;
+    float buffer = 1.0f;
 
     void Awake()
     {
@@ -33,20 +37,35 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         MicrophoneDetection();
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, -Vector2.up, playerHeight + 0.2f, daGround);
+        if (hit)
+        {
+            onGround = true;
+        }
+        else
+        {
+            onGround = false;
+        }
+
+        if (!onGround) jump = true;
+        if (jump && onGround)
+        {
+            canJump = true;
+            jump = false;
+        }
     }
 
     void FixedUpdate()
     {
         if (walking)
         {
-            rb.linearVelocity = new Vector2(moveSpeed * Time.deltaTime, rb.linearVelocity.y);
+            rb.linearVelocity = new Vector2(moveSpeed, rb.linearVelocity.y);
         }
         else
         {
             rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
         }
-
-        if (jump) Jump();
     }
 
     void MicrophoneDetection()
@@ -59,9 +78,9 @@ public class PlayerMovement : MonoBehaviour
             //Debug.Log("No Voice input");
         }
 
-        if (loudness > yellingThreshold && canJump)
+        if (loudness > yellingThreshold && canJump && onGround)
         {
-            jump = true;
+            Jump();
         }
         else if (loudness >= threshold)
         {
@@ -81,11 +100,11 @@ public class PlayerMovement : MonoBehaviour
 
     void Jump()
     {
-        //print("JUMP!!!");
         canJump = false;
-        rb.AddForce(Vector2.up * jumpForce * Time.deltaTime, ForceMode2D.Impulse); ;
-        jump = false;
+        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
     }
+
+
     void AudioSampleDetection()
     {
         float loudness = detector.GetLoudness(source.timeSamples, source.clip);
@@ -93,15 +112,4 @@ public class PlayerMovement : MonoBehaviour
         transform.localScale = Vector2.Lerp(minScale, maxScale, loudness);
 
     }
-
-    void OnCollisionEnter2D(Collision2D col)
-    {
-        if (col.gameObject.tag == "Ground") canJump = true;
-    }
-
-    void OnCollisionExit2D(Collision2D col)
-    {
-        if (col.gameObject.tag == "Ground") canJump = false;
-    }
-
 }

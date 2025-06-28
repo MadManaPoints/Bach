@@ -382,7 +382,6 @@ GameObject:
   - component: {fileID: 357390486}
   - component: {fileID: 357390489}
   - component: {fileID: 357390488}
-  - component: {fileID: 357390487}
   m_Layer: 5
   m_Name: Voice Input Indicator
   m_TagString: Untagged
@@ -409,29 +408,6 @@ RectTransform:
   m_AnchoredPosition: {x: 538, y: 26}
   m_SizeDelta: {x: 5.7191, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &357390487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 357390485}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a071a25b9b45e9e44b024920d7031738, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  source: {fileID: 0}
-  minScale: {x: 1, y: 1}
-  maxScale: {x: 3, y: 3}
-  detector: {fileID: 1585628675}
-  loudness: 0
-  loudnessSensibility: 50
-  threshold: 0.1
-  yellingThreshold: 4
-  moveSpeed: 100
-  jumpForce: 500
-  voiceInputFill: {fileID: 357390488}
 --- !u!114 &357390488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1106,7 +1082,7 @@ GameObject:
   - component: {fileID: 1470654993}
   - component: {fileID: 1470654992}
   - component: {fileID: 1470654991}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Floor
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -1223,7 +1199,7 @@ Transform:
   m_GameObject: {fileID: 1470654990}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.44, y: -0.93, z: -11.046}
+  m_LocalPosition: {x: 5.87, y: -0.93, z: -11.046}
   m_LocalScale: {x: 6.2106113, y: 3.421412, z: 1.471575}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1490,7 +1466,7 @@ Transform:
   m_GameObject: {fileID: 1694262507}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.48, y: -0.93, z: -11.046}
+  m_LocalPosition: {x: 2.92, y: -0.93, z: -11.046}
   m_LocalScale: {x: 0.62105495, y: 3.421412, z: 1.471575}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1617,7 +1593,7 @@ Transform:
   m_GameObject: {fileID: 1714202987}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.4, y: -1.52, z: 0}
+  m_LocalPosition: {x: -6.4, y: -1.53, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1635,6 +1611,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a071a25b9b45e9e44b024920d7031738, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerHeight: 1
+  daGround:
+    serializedVersion: 2
+    m_Bits: 1024
   source: {fileID: 0}
   minScale: {x: 1, y: 1}
   maxScale: {x: 3, y: 3}
@@ -1642,9 +1622,9 @@ MonoBehaviour:
   loudness: 0
   loudnessSensibility: 50
   threshold: 0.1
-  yellingThreshold: 4
-  moveSpeed: 200
-  jumpForce: 500
+  yellingThreshold: 3
+  moveSpeed: 5
+  jumpForce: 10
   voiceInputFill: {fileID: 357390488}
 --- !u!50 &1714202993
 Rigidbody2D:
@@ -1684,7 +1664,7 @@ GameObject:
   - component: {fileID: 1832658317}
   - component: {fileID: 1832658316}
   - component: {fileID: 1832658318}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Floor
   m_TagString: Ground
   m_Icon: {fileID: 0}
